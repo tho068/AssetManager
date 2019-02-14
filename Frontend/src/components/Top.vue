@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-toolbar(clipped-left)
+  v-toolbar(clipped-left color="primary" dark)
     //v-toolbar-side-icon
     v-toolbar-title Asset manager
 
@@ -9,7 +9,7 @@
       v-btn(flat to="/")
         v-icon(left) home
         | Home
-      v-btn(flat to="/products")
+      v-btn(flat to="/assets/assets")
         v-icon(left) favorite
         | Products
       v-btn(flat to="/service")

@@ -5,7 +5,7 @@
       v-flex(shrink)
         h1 Assets
       v-flex#button-group(grow)
-        v-btn(round flat outline @click="showNewProductDialog = true") + New
+        v-btn(flat @click="showNewProductDialog = true") + New
     v-card
       v-card-title
         v-text-field(
@@ -18,23 +18,25 @@
       v-card-text
         v-data-table(
           :headers="headers"
-          :items="items"
+          :items="getAssets"
           :search="search"
         )
           template(slot="items" slot-scope="props")
-            td {{ props.item.name }}
-            td {{ props.item.manufacturer }}
-            td {{ props.item.serialNumber }}
+            td
+              router-link(:to="{ name: 'SingleAsset', params: {id: props.item.id} }")
+                | {{ props.item.serialNumber }}
+            td {{ getCollectionById(props.item.collection).name }}
             td
               v-btn(icon round @click="editItem(props.item)")
                 v-icon edit
-              v-btn(icon round @click="deleteItem(props.item)")
+              v-btn(icon round @click="deleteAsset({asset: props.item})")
                 v-icon delete
 </template>
 
 <script>
 
 import NewProductDialog from '@/components/dialogs/NewProduct.vue'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'products',
@@ -44,16 +46,28 @@ export default {
       showNewProductDialog: false,
       search: '',
       headers: [
-        {text: 'Name', value: 'name', align: 'left'},
-        {text: 'Manufacturer', value: 'manufacturer', align: 'left'},
         {text: 'Serial number', value: 'serialNumber', align: 'left'},
-        {text: 'Actions', value: 'actions', align: 'left'}
-      ],
-      items: [
-        {name: 'Temperatur logger', manufacturer: 'Novamar AS', serialNumber: '1234'},
-        {name: 'Sylinderformet bøye', manufacturer: 'Novamar AS', serialNumber: '1235'}
+        {text: 'Product name', value: 'productName', align: 'left'}
       ]
     }
+  },
+  created () {
+    this.$eventHub.$on('dialog-closed', () => {
+      this.showNewProductDialog = false
+    })
+  },
+  methods: {
+    ...mapActions('products', [
+      'deleteAsset'
+    ])
+  },
+  computed: {
+    ...mapGetters('products', [
+      'getAssets'
+    ]),
+    ...mapGetters('collection', [
+      'getCollectionById'
+    ])
   }
 }
 </script>

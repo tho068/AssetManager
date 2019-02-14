@@ -5,6 +5,7 @@ import Service from '@/views/Service.vue'
 import Collection from '@/views/Products/Collection.vue'
 import Products from '@/views/Products/Products.vue'
 import SingleCollection from '@/views/Products/SingleCollection.vue'
+import SingleAsset from '@/views/Products/SingleAsset.vue'
 
 Vue.use(Router)
 
@@ -29,6 +30,11 @@ export default new Router({
       path: '/assets/assets',
       name: 'Assets',
       component: Products
+    },
+    {
+      path: '/assets/assets/:id',
+      name: 'SingleAsset',
+      component: SingleAsset
     },
     {
       path: '/service',
